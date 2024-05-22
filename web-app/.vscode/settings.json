@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "database",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "sacapp",
+            "database": "sacapp_development",
+            "username": "sacapp",
+            "password": "sacapp"
+        }
+    ]
+}

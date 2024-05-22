@@ -1,0 +1,5 @@
+CREATE USER vscode CREATEDB;
+CREATE DATABASE vscode WITH OWNER vscode;
+CREATE USER sacapp WITH PASSWORD 'sacapp';
+CREATE DATABASE sacapp_development WITH OWNER sacapp;
+GRANT ALL PRIVILEGES ON DATABASE sacapp_development TO sacapp;

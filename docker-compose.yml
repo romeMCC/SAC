@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  web-app:
+      build:
+          context: ./web-app
+          dockerfile: Dockerfile
+      ports:
+        - "3001:80"
+      command: sleep infinity
+      volumes:
+        - .:/workspaces:cached
+        # - ./backend/app:/var/www
+        #- gem_cache:/usr/local/bundle/gems
+        #- node_modules:/app/node_modules
+      environment:
+        RAILS_ENV: development
+  database:
+    build:
+        context: ./database
+        dockerfile: Dockerfile
+    #image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - ./database/postgres-data:/var/lib/postgresql/data
+      #- ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+        - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres 
+      POSTGRES_DB: postgres 
+      POSTGRES_PASSWORD: postgres 
+volumes:
+  postgres-data:

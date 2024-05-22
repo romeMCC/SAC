@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SAC Application</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <title>SAC | Autentificación de Usuarios</title>    
+    <link href="<%= asset_path 'favicon.png' %>" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<%# 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400,600;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    %>
+ <%= stylesheet_link_tag 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400,600;700;800&family=Roboto:wght@300;400;500&display=swap', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', 'vendor.min', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', 'app.min', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%# <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"> %>
+    <%= javascript_include_tag  'application', 'app.min', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag  'application', 'vendor.min', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class=" auth">
+    <section class="system-error-messages">
+      <p class="alert"><%= alert %></p>
+    </section>
+    <%= yield %>
+  </body>
+</html>

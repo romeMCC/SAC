@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @data_dictionary_field %>
+
+<div>
+  <%= link_to "Edit this data dictionary field", edit_data_dictionary_field_path(@data_dictionary_field) %> |
+  <%= link_to "Back to data dictionary fields", data_dictionary_fields_path %>
+
+  <%= button_to "Destroy this data dictionary field", @data_dictionary_field, method: :delete %>
+</div>

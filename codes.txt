@@ -1,0 +1,492 @@
+git config user.email "m23331283@hermosillo.tecnm.mx"
+git config user.name "Roman"
+
+# Where the I18n library should search for translation files
+I18n.load_path += Dir[Rails.root.join('lib', 'locale', '*.{rb,yml}')]
+
+# Permitted locales available for the application
+I18n.available_locales = [:es, :en]
+
+# Set default locale to something other than :en
+I18n.default_locale = :es
+
+# config/initializers/generators.rb
+Rails.application.config.generators do |g|
+    g.orm :active_record, primary_key_type: :uuid
+end
+
+rails generate migration enable_uuid --no-test-framework
+
+
+
+rails generate controller Public index --no-helper --no-controller-specs
+
+DEVISE
+bundle add devise
+rails generate devise:install
+config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+rails generate devise User
+
+bundle add devise-i18n
+on ApplicationController...
+
+before_action do
+  I18n.locale = :es # Or whatever logic you use to choose.
+end
+
+rails db:migrate
+rails g devise:i18n:views
+
+rails g model Organism name:string initials:string code:string created_by:uuid modified_by:uuid
+rails g model AdministrativeUnits name:string initials:string code:string organism:references created_by:uuid modified_by:uuid
+rails g model ModificationType name:string description:string created_by:uuid modified_by:uuid
+rails g model FieldType name:string description:string created_by:uuid modified_by:uuid
+
+rails g scaffold Catalog name:string description:string created_by:uuid modified_by:uuid
+rails g scaffold CatalogData catalog:references tuples:json created_by:uuid modified_by:uuid
+
+rails g scaffold DataDictionary current_version:string modification_type:references description:string catalog:references created_by:uuid modified_by:uuid
+rails g scaffold DataDictionaryFields data_dictionary:references version:string field_name:string field_type:references field_description:string created_by:uuid modified_by:uuid
+
+SEEDS
+
+ModificationType.create!([{
+    name: "NUEVA COLUNNA"
+},
+{
+    name: "ELIMINACIÓN COLUNNA"
+},
+{
+    name: "EDICIÓN CAMPOS"
+}
+])
+
+Organism.create!(
+    [
+    {
+        "code": 140,
+        "initials": "APISON",
+        "name": "ADMINISTRACIÓN PORTUARIA INTEGRAL DE SONORA, S.A. DE C.V."
+    },
+    {
+        "code": 174,
+        "initials": "CECLES",
+        "name": "CENTRO DE CONCILIACIÓN LABORAL DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 141,
+        "initials": "CEESTRA",
+        "name": "CENTRO ESTATAL DE TRANSPLANTE"
+    },
+    {
+        "code": 167,
+        "initials": "CRESON",
+        "name": "CENTRO REGIONAL DE FORMACIÓN PROFESIONAL DOCENTE DE SONORA"
+    },
+    {
+        "code": 142,
+        "initials": "COBACH",
+        "name": "COLEGIO DE BACHILLERES DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 143,
+        "initials": "CONALEP",
+        "name": "COLEGIO DE EDUCACIÓN PROFESIONAL TÉCNICA DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 144,
+        "initials": "CECYTES",
+        "name": "COLEGIO DE ESTUDIOS CIENTÍFICOS Y TECNOLÓGICOS DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 2,
+        "initials": "CEDES",
+        "name": "COMISIÓN DE ECOLOGÍA Y DESARROLLO SUSTENTABLE DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 5,
+        "initials": "COVES",
+        "name": "COMISIÓN DE VIVIENDA DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 6,
+        "initials": "CODESON",
+        "name": "COMISIÓN DEL DEPORTE DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 172,
+        "initials": "CEEAV",
+        "name": "COMISIÓN EJECUTIVA ESTATAL DE ATENCIÓN A VÍCTIMAS DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 7,
+        "initials": "CEA",
+        "name": "COMISIÓN ESTATAL DEL AGUA"
+    },
+    {
+        "code": 8,
+        "initials": "CEDIS",
+        "name": "COMISIÓN ESTATAL PARA EL DESARROLLO DE LOS PUEBLOS Y COMUNIDADES INDÍGENAS"
+    },
+    {
+        "code": 163,
+        "initials": "CCETBYBES",
+        "name": "COMITÉ DE CAMPAÑA PARA LA ERRADICACIÓN DE LA TUBERCULOSIS BOVINA Y BRUCELOSIS EN EL ESTADO DE SONORA"
+    },
+    {
+        "code": 123,
+        "initials": "CCTPS",
+        "name": "CONSEJO CIUDADANO DEL TRANSPORTE PÚBLICO SUSTENTABLE"
+    },
+    {
+        "code": 9,
+        "initials": "COECYT",
+        "name": "CONSEJO ESTATAL DE CIENCIA Y TECNOLOGÍA"
+    },
+    {
+        "code": 10,
+        "initials": "CECOP",
+        "name": "CONSEJO ESTATAL DE CONCERTACIÓN PARA LA OBRA PÚBLICA"
+    },
+    {
+        "code": 176,
+        "initials": "CODESO",
+        "name": "CONSEJO PARA EL DESARROLLO SOSTENIBLE DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 12,
+        "initials": "CSPRB",
+        "name": "CONSEJO SONORENSE  REGULADOR DEL BACANORA"
+    },
+    {
+        "code": 168,
+        "initials": "CEPC",
+        "name": "COORDINACIÓN ESTATAL DE PROTECCIÓN CIVIL "
+    },
+    {
+        "code": 13,
+        "initials": "EE",
+        "name": "EJECUTIVO DEL ESTADO"
+    },
+    {
+        "code": 14,
+        "initials": "FFRS",
+        "name": "FIDEICOMISO FONDO REVOLVENTE SONORA"
+    },
+    {
+        "code": 169,
+        "initials": "AGROSON ",
+        "name": "FIDEICOMISO MAESTRO PARA EL FINANCIAMIENTO DEL SECTOR AGROPECUARIO EN SONORA"
+    },
+    {
+        "code": 145,
+        "initials": "FPC",
+        "name": "FIDEICOMISO PUENTE COLORADO"
+    },
+    {
+        "code": 19,
+        "initials": "FIDESON",
+        "name": "FINANCIERA PARA EL DESARROLLO ECONÓMICO DE SONORA"
+    },
+    {
+        "code": 16,
+        "initials": "FOOSSI",
+        "name": "FONDO DE OPERACIÓN DE OBRAS SONORA SI"
+    },
+    {
+        "code": 20,
+        "initials": "IAES",
+        "name": "INSTITUTO DE ACUACULTURA DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 132,
+        "initials": "ICEES",
+        "name": "INSTITUTO DE BECAS Y CRÉDITO EDUCATIVO DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 22,
+        "initials": "ICATSON",
+        "name": "INSTITUTO DE CAPACITACIÓN PARA EL TRABAJO DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 17,
+        "initials": "FEMOT",
+        "name": "INSTITUTO DE MOVILIDAD Y TRANSPORTE PARA EL ESTADO DE SONORA"
+    },
+    {
+        "code": 146,
+        "initials": "ISSSTESON",
+        "name": "INSTITUTO DE SEGURIDAD Y SERVICIOS SOCIALES DE LOS TRABAJADORES DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 121,
+        "initials": "IEEPC",
+        "name": "INSTITUTO ESTATAL ELECTORAL Y DE PARTICIPACIÓN CIUDADANA"
+    },
+    {
+        "code": 24,
+        "initials": "ISC",
+        "name": "INSTITUTO SONORENSE DE CULTURA"
+    },
+    {
+        "code": 25,
+        "initials": "ISEA",
+        "name": "INSTITUTO SONORENSE DE EDUCACIÓN PARA LOS ADULTOS"
+    },
+    {
+        "code": 26,
+        "initials": "ISIE",
+        "name": "INSTITUTO SONORENSE DE INFRAESTRUCTURA EDUCATIVA"
+    },
+    {
+        "code": 27,
+        "initials": "ISJ",
+        "name": "INSTITUTO SONORENSE DE LA JUVENTUD"
+    },
+    {
+        "code": 28,
+        "initials": "ISM",
+        "name": "INSTITUTO SONORENSE DE LAS MUJERES"
+    },
+    {
+        "code": 122,
+        "initials": "ISTAI",
+        "name": "INSTITUTO SONORENSE DE TRANSPARENCIA, ACCESO A LA INFORMACIÓN Y PROTECCIÓN DE DATOS PERSONALES (ISTAI)"
+    },
+    {
+        "code": 175,
+        "initials": "ISAAM",
+        "name": "INSTITUTO SONORENSE PARA LA ATENCIÓN DE LOS ADULTOS MAYORES"
+    },
+    {
+        "code": 147,
+        "initials": "ITESCA",
+        "name": "INSTITUTO TECNOLÓGICO SUPERIOR DE CAJEME"
+    },
+    {
+        "code": 148,
+        "initials": "ITSC",
+        "name": "INSTITUTO TECNOLÓGICO SUPERIOR DE CANANEA"
+    },
+    {
+        "code": 149,
+        "initials": "ITSPP",
+        "name": "INSTITUTO TECNOLÓGICO SUPERIOR DE PUERTO PEÑASCO"
+    },
+    {
+        "code": 30,
+        "initials": "JCES",
+        "name": "JUNTA DE CAMINOS E INFRAESTRUCTURA CARRETERA DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 137,
+        "initials": "MUN",
+        "name": "MUNICIPIOS"
+    },
+    {
+        "code": 31,
+        "initials": "MUSAS",
+        "name": "MUSEO DEL CENTRO CULTURAL MUSAS"
+    },
+    {
+        "code": 32,
+        "initials": "MUSOR",
+        "name": "MUSEO SONORA EN LA REVOLUCIÓN"
+    },
+    {
+        "code": 173,
+        "initials": "OM",
+        "name": "OFICIALÍA MAYOR"
+    },
+    {
+        "code": 33,
+        "initials": "IMPULSOR",
+        "name": "OPERADORA DE PROYECTOS ESTRATÉGICOS"
+    },
+    {
+        "code": 34,
+        "initials": "PROAES",
+        "name": "PROCURADURÍA AMBIENTAL DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 15,
+        "initials": "PROGRESO",
+        "name": "PROGRESO FIDEICOMISO PROMOTOR URBANO DE SONORA"
+    },
+    {
+        "code": 11,
+        "initials": "PROSON",
+        "name": "PROSONORA"
+    },
+    {
+        "code": 35,
+        "initials": "RS",
+        "name": "RADIO SONORA"
+    },
+    {
+        "code": 36,
+        "initials": "SAGARHPA",
+        "name": "SECRETARÍA DE AGRICULTURA, GANADERÍA, RECURSOS HIDRÁULICOS, PESCA Y ACUACULTURA"
+    },
+    {
+        "code": 37,
+        "initials": "SEDESSON",
+        "name": "SECRETARÍA DE DESARROLLO SOCIAL"
+    },
+    {
+        "code": 38,
+        "initials": "SE",
+        "name": "SECRETARÍA DE ECONOMÍA"
+    },
+    {
+        "code": 138,
+        "initials": "SEC",
+        "name": "SECRETARÍA DE EDUCACIÓN Y CULTURA"
+    },
+    {
+        "code": 39,
+        "initials": "SG",
+        "name": "SECRETARÍA DE GOBIERNO"
+    },
+    {
+        "code": 40,
+        "initials": "SH",
+        "name": "SECRETARÍA DE HACIENDA"
+    },
+    {
+        "code": 41,
+        "initials": "SIDUR",
+        "name": "SECRETARÍA DE INFRAESTRUCTURA Y DESARROLLO URBANO"
+    },
+    {
+        "code": 44,
+        "initials": "SCJ",
+        "name": "SECRETARÍA DE LA CONSEJERÍA JURÍDICA"
+    },
+    {
+        "code": 42,
+        "initials": "SCG",
+        "name": "SECRETARÍA DE LA CONTRALORÍA GENERAL"
+    },
+    {
+        "code": 131,
+        "initials": "SSP",
+        "name": "SECRETARÍA DE SALUD PÚBLICA"
+    },
+    {
+        "code": 139,
+        "initials": "SSPE",
+        "name": "SECRETARÍA DE SEGURIDAD PÚBLICA"
+    },
+    {
+        "code": 43,
+        "initials": "ST",
+        "name": "SECRETARÍA DEL TRABAJO"
+    },
+    {
+        "code": 4,
+        "initials": "STUR",
+        "name": "SECRETARÍA DEL TURISMO DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 170,
+        "initials": "SESEA",
+        "name": "SECRETARÍA EJECUTIVA DEL SISTEMA ESTATAL ANTICORRUPCIÓN "
+    },
+    {
+        "code": 45,
+        "initials": "SAEBE",
+        "name": "SERVICIO DE ADMINISTRACIÓN Y ENAJENACIÓN DE BIENES DE ENTIDADES DEL GOBIERNO DEL ESTADO"
+    },
+    {
+        "code": 151,
+        "initials": "SSS",
+        "name": "SERVICIOS DE SALUD DE SONORA"
+    },
+    {
+        "code": 171,
+        "initials": "SETS",
+        "name": "SISTEMA ESTATAL DE TELEVISIÓN SONORENSE "
+    },
+    {
+        "code": 47,
+        "initials": "DIF",
+        "name": "SISTEMA PARA EL DESARROLLO INTEGRAL DE LA FAMILIA DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 164,
+        "initials": "STJE",
+        "name": "SUPREMO TRIBUNAL DE JUSTICIA DEL ESTADO"
+    },
+    {
+        "code": 48,
+        "initials": "TERUSON",
+        "name": "TELEFONÍA RURAL DE SONORA"
+    },
+    {
+        "code": 152,
+        "initials": "TELEMAX",
+        "name": "TELEVISORA DE HERMOSILLO, S.A. DE C.V."
+    },
+    {
+        "code": 153,
+        "initials": "TCA",
+        "name": "TRIBUNAL DE JUSTICIA ADMINISTRATIVA"
+    },
+    {
+        "code": 128,
+        "initials": "TEE",
+        "name": "TRIBUNAL ESTATAL ELECTORAL"
+    },
+    {
+        "code": 29,
+        "initials": "USPES",
+        "name": "UNIVERSIDAD DE LA SEGURIDAD PÚBLICA DEL ESTADO DE SONORA"
+    },
+    {
+        "code": 154,
+        "initials": "UNISIERRA",
+        "name": "UNIVERSIDAD DE LA SIERRA"
+    },
+    {
+        "code": 155,
+        "initials": "UES",
+        "name": "UNIVERSIDAD ESTATAL DE SONORA"
+    },
+    {
+        "code": 156,
+        "initials": "UTETCHOJOA",
+        "name": "UNIVERSIDAD TECNOLÓGICA DE ETCHOJOA"
+    },
+    {
+        "code": 157,
+        "initials": "UTGUAYMAS",
+        "name": "UNIVERSIDAD TECNOLÓGICA DE GUAYMAS"
+    },
+    {
+        "code": 158,
+        "initials": "UTH",
+        "name": "UNIVERSIDAD TECNOLÓGICA DE HERMOSILLO"
+    },
+    {
+        "code": 159,
+        "initials": "UTN",
+        "name": "UNIVERSIDAD TECNOLÓGICA DE NOGALES, SONORA"
+    },
+    {
+        "code": 160,
+        "initials": "UTPP",
+        "name": "UNIVERSIDAD TECNOLÓGICA DE PUERTO PEÑASCO"
+    },
+    {
+        "code": 161,
+        "initials": "UTSLRC",
+        "name": "UNIVERSIDAD TECNOLÓGICA DE SAN LUIS RÍO COLORADO"
+    },
+    {
+        "code": 162,
+        "initials": "UTSS",
+        "name": "UNIVERSIDAD TECNOLÓGICA DEL SUR DE SONORA"
+    }
+]
+)

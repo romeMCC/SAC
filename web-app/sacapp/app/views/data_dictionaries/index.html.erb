@@ -1,0 +1,54 @@
+<p style="color: green"><%= t notice %></p>
+
+<h1><%= t "Data dictionaries" %></h1>
+
+  <section class="py-4">
+        <div class="row">
+          <div class="col-sm-8">
+            <%= link_to t("New data dictionary"), new_data_dictionary_path, class: "btn btn-primary", data: { turbo_frame: "remote_modal" }%>
+          </div>
+
+        </div>
+      </section>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th><%= t "Catalog" %></th>
+      <th><%= t "Version" %></th>
+      <th><%= t "Description" %></th>
+      <th><%= t "Modification type" %></th>
+      <th><%= t "Current version" %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @data_dictionaries.each do |data_dictionary| %>
+      <tr>
+        <td><%= data_dictionary.catalog_id %></td>
+        <td><%= data_dictionary.version %></td>
+        <td><%= data_dictionary.description %></td>
+        <td><%= data_dictionary.modification_type_id %></td> 
+        <td><%= data_dictionary.current_version %></td> 
+        
+        <td><%= link_to t("Edit"), edit_data_dictionary_path(data_dictionary), class: "btn btn-warning btn-sm", data: { turbo_frame: "remote_modal" } %></td>        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<script>
+  $(document).ready(function() {
+
+    // function closeModal() {
+    //   $('#newDataDictionaryModal').modal('hide');
+    //   console.log('Modal closed');
+    // }
+
+    // $('#newDataDictionaryModal').on('hidden.bs.modal', function (e) {
+    //   console.log('Modal on hidden');
+    //   $(this).find('form').trigger('reset');
+    // });
+
+  });
+</script>

@@ -1,0 +1,50 @@
+<div id="<%= dom_id catalog %>">
+<h3>Catálogo</h3>
+<table>
+  <tr>
+    <th>Nombre</th>
+    <td><%= catalog.name %></td>
+  </tr>
+  <tr>
+    <th>Descripción</th>
+    <td><%= catalog.description %></td>
+  </tr>
+  <tr>
+    <th>Creado</th>
+    <td><%= catalog.created_at %></td>
+  </tr>
+  <tr>
+    <th>Modificado</th>
+    <td><%= catalog.updated_at %></td>
+  </tr>
+</table>
+
+<h2>Diccionario de datos</h2>
+<%= link_to "Nueva version", new_data_dictionary_path(catalog_id: catalog.id) %>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Created</th>
+      <th>Updated</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% catalog.data_dictionaries.each do |data_dictionary| %>
+      <tr>
+        <td><%= data_dictionary.current_version %></td>
+        <td><%= data_dictionary.updated_at %></td>
+        <td><%= data_dictionary.modification_type.name %></td>
+        <td><%= data_dictionary.updated_at %></td>
+        <td><%= link_to 'Ver', data_dictionary_fields_path(data_dictionary) %></td>
+        <td><%= link_to 'Editar', edit_data_dictionary_path(data_dictionary) %></td>
+        <td><%= link_to 'Eliminar', data_dictionary, method: :delete, data: { confirm: 'Eliminar?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+</div>
+

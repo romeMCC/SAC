@@ -1,0 +1,28 @@
+<%= form_with(model: catalog) do |form| %>
+ <%# <div id="error_explanation">
+ </div> %>
+  <% if catalog.errors.any? %>
+    <div class="alert alert-danger">
+      <h5>Corregir lo siguiente antes de guardar:</h5>
+      <ul>
+        <% catalog.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+      <div class="form-group">
+        <%= form.label :name, t('name'), style: "display: block" %>
+        <%= form.text_field :name, class: "form-control" %>
+      </div>
+      <hr style="border:none">
+      <div class="form-group">
+        <%= form.label :description, t('description'), style: "display: block" %>
+        <%= form.text_area :description, class: "form-control" %>
+      </div>
+      <hr style="border:none">
+      <div class="text-right">
+        <%= form.submit t('submit'), class: "btn btn-success" %>
+      </div>
+    <% end %>
+

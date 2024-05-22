@@ -1,0 +1,218 @@
+
+
+<div id="app" class="app auth-wrapp">
+
+
+        <div class="auth-pattern"></div>
+        <div class="auth-bg auth-bg-scroll" style="background-image: url(<%= asset_path 'login-bg.jpg' %>);">
+            <div class="auth-mask"></div>
+        </div>
+
+
+
+        <div class="auth-content">
+            <div class="container-fluid">
+                <div class="row g-0">
+                    <div class="col-sm-7 auth-border">
+
+                        <div class="auth-info">
+
+
+
+                            <header class="mb-5">
+                                <div class="row justify-content-center align-items-center m-0 mb-sm-5 mb-md-3">
+
+                                    <div class="col-sm-3 d-none d-sm-inline-block">
+
+                                        <a class="auth-logo logo-1" href="https://www.sonora.gob.mx" title="">
+                                            <img src="<%= asset_path 'logo-sonora-white.svg' %>" class=""
+                                                alt="Gobierno del Estado de Sonora">
+                                        </a>
+
+                                    </div>
+
+
+                                    <div class="col-6 col-sm-3 offset-0 offset-sm-1 ">
+
+                                        <a class="auth-logo logo-2" href="public" title="Declaranet Sonora">
+                                            <img src="<%= asset_path 'logo-white.svg' %>" class="" alt="Declaranet Sonora">
+                                        </a>
+
+                                    </div>
+                                    <div class="col-6 col-sm-3 offset-0 offset-sm-1 ">
+                                        <a class="auth-logo logo-3" href="https://om.sonora.gob.mx" title="">
+                                            <img src="<%= asset_path 'logo-gobierno-digital-white.svg' %>" class=""
+                                                alt="Subsecretaría de Gobierno Digital">
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            </header>
+
+
+                            <div class="row my-auto justify-content-center mb-0 mb-sm-5 mb-md-3 ">
+                                <div class="col-12 col-sm-8 col-md-10 text-center">
+                                    <h1 class="text-uppercase">SAC</h1>
+                                    <h2 class="mb-3">Sistema Administrador de Catálogos del Gobierno del Estado de Sonora</h2>
+                                    <p class="">
+                                        Es la herramienta electrónica a través de la cual las personas servidoras
+                                        públicas estatales presentan sus declaraciones de situación patrimonial y de
+                                        intereses.
+                                    </p>
+                                </div>
+                            </div>
+
+
+
+                            <footer>
+                                <div class="auth-footer d-none d-sm-block">
+                                    <div class="row justify-content-center">
+                                        <div class="col-sm-8 col-md-10 text-center">
+                                            <p class=" text-light-400 mb-0">
+                                                Centro de Gobierno, Edificio Hermosillo 2do. piso. Blvd. Paseo Río
+                                                Sonora y Comonfort. Col. Villa de Seris. C.P. 83280, Hermosillo, Sonora,
+                                                México.
+
+                                            </p>
+
+
+
+
+                                        </div>
+
+
+                                        <div class="col-sm-12">
+                                            <p class="text-center mt-3">
+                                                <a href="javascript:void(0);"
+                                                    class="btn   btn btn-link py-0 px-0 link-white  "
+                                                    title="Aviso de Privacidad" data-bs-toggle="modal"
+                                                    data-bs-target="#termsModal">
+                                                    <span class="text"> Aviso de Privacidad</span>
+                                                </a>
+
+
+
+
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </footer>
+
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="col-md-5">
+
+
+                        <div class="auth-form">
+                            <section class="system-messages">
+
+                                <div class="container-fluid">
+                                    <div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="system-error-messages">
+
+
+                            </section>
+
+
+
+                            <h3 class="text-uppercase text-white"><span class="mdi mdi-account-circle-outline"></span>
+                                Inicio de Sesión</h3>
+
+                            <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { autocomplete: "off" }) do |f| %>
+                              <%= f.hidden_field :authenticity_token, value: form_authenticity_token %>
+
+                              <div class="my-3">
+                                <div class="form-floating outline outline-white">
+                                  <%= f.email_field :email, class: "form-control form-control-lg", placeholder: "Ingresa con tu correo electrónico" %>
+                                  <label for="email">Correo Electrónico</label>
+                                </div>
+                              </div>
+
+                              <div class="mb-3">
+                                <div class="form-floating outline outline-white">
+                                  <%= f.password_field :password, class: "form-control form-control-lg", placeholder: "Ingresa tu contraseña" %>
+                                  <label for="password">Contraseña</label>
+                                </div>
+                              </div>
+
+                              <div class="row my-3">
+                                <div class="col-5 col-sm-6">
+                                  <div class="form-check">
+                                    <%= f.check_box :remember_me, class: "form-check-input", id: "remember" %>
+                                    <label class="form-check-label text-white" for="remember">
+                                      Recordarme
+                                    </label>
+                                  </div>
+                                </div>
+                                <div class="col-7 col-sm-6 text-end">
+                                  <%= link_to "¿Olvidaste tu contraseña?", new_password_path(resource_name), class: "link-light" %>
+                                </div>
+                              </div>
+
+                              <div class="mt-5 text-center">
+                                <%= f.submit "Iniciar Sesión", class: "btn btn-white btn-lg shadow-sm rounded-pill" %>
+                              </div>
+                            <% end %>
+
+
+                            <p class="text-center text-white mt-5 mb-5 mb-sm-0">¿No tienes una cuenta? <a
+                                    class="link-warning" href="#registerModal" data-bs-toggle="modal"
+                                    data-bs-target="#registerModal" title="registrar">Regístrate</a>
+                            </p>
+
+                            <div class="d-sm-none w-50 m-auto d-block text-center">
+
+                                <a class="" href="https://www.sonora.gob.mx" title="">
+                                    <img src="<%= asset_path 'logo-sonora-white.svg' %>" class=""
+                                        alt="Gobierno del Estado de Sonora">
+                                </a>
+
+                                <p class="text-center mt-3">
+                                    <a href="javascript:void(0);" class="btn   btn btn-link py-0 px-0 link-white  "
+                                        title="Aviso de Privacidad" data-bs-toggle="modal" data-bs-target="#termsModal">
+                                        <span class="text"> Aviso de Privacidad</span>
+                                    </a>
+
+
+
+
+
+                                </p>
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+                    <a href="javascript:void(0);" class="btn  btn-circle btn-warning btn-phone  "
+                        title="Información de Contacto" data-bs-toggle="modal" data-bs-target="#phoneModal">
+                        <span class="mdi mdi-chat-processing-outline"></span> <span class="text"> Información de
+                            Contacto</span>
+                    </a>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>

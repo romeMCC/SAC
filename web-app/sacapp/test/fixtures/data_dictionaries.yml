@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  current_version: MyString
+  modification_type: one
+  description: MyString
+  catalog: one
+  created_by: 
+  modified_by: 
+
+two:
+  current_version: MyString
+  modification_type: two
+  description: MyString
+  catalog: two
+  created_by: 
+  modified_by: 

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  data_dictionary: one
+  version: MyString
+  field_name: MyString
+  field_type: one
+  field_description: MyString
+  created_by: 
+  modified_by: 
+
+two:
+  data_dictionary: two
+  version: MyString
+  field_name: MyString
+  field_type: two
+  field_description: MyString
+  created_by: 
+  modified_by: 

@@ -1,0 +1,21 @@
+<%= turbo_stream.append "data_dictionary_fields" do %>
+  <li data-controller="remove" data-remove-target="element" style="list-style: none;">
+    <div class="form-group">
+      <%= label_tag :nombre, "Nombre", style: "display: block" %>
+      <%= text_field_tag "data_dictionary[data_dictionary_fields_attributes][][field_name]", "", id: "", data: {controller: "focus", focus_focus_value: "now"}, class: 'form-control' %>    
+    </div>   
+    <hr style="border:none"> 
+    <div class="form-group">
+      <%= label_tag :tipo, "Tipo de campo", style: "display: block" %>
+      <%= select_tag "data_dictionary[data_dictionary_fields_attributes][][field_type_id]", options_for_select(FieldType.all.map { |ft| [ft.name, ft.id] }), id: "", class: 'form-control' %>
+    </div>  
+    <hr style="border:none">
+      <div class="form-group">
+        <%= label_tag :description, "Descripción", style: "display: block" %>
+        <%= text_area_tag "data_dictionary[data_dictionary_fields_attributes][][field_description]", "", id: "" , size: "40x5", class: 'form-control' %>    
+      </div>              
+    <hr style="border:none">
+
+  <button data-action="remove#remove" class="btn btn-danger">Remove</button>
+  </li>
+<% end %>

@@ -1,0 +1,171 @@
+<%= form_with(model: data_dictionary) do |form| %>
+  <% if data_dictionary.errors.any? %>
+    <div class="alert alert-danger">
+      <h5>Corregir lo siguiente antes de guardar:</h5>
+      <ul>
+        <% data_dictionary.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+   <div class="form-group">
+    <%= form.label t :version, style: "display: block" %>
+    <%= form.text_field :version, readonly: true, class: "form-control" %>
+  </div>
+  <hr style="border:none">
+  <div class="form-group">
+    <%= form.label t :catalog_id, style: "display: block" %>
+    <%= form.collection_select :catalog_id, Catalog.all, :id, :name, { include_blank: true }, { class: "form-control" } %>  
+  </div>
+  <hr style="border:none">  
+  <div class="form-group">
+    <%= form.label t :description, style: "display: block" %>
+    <%= form.text_area :description, rows: 5, cols: 40, class: "form-control" %>
+  </div>
+  <hr style="border:none">
+    <div class="form-group">
+      <%= form.label t :modification_type_id, style: "display: block" %>
+      <%= form.collection_select :modification_type_id, ModificationType.all, :id, :name, { include_blank: true }, { class: "form-control" } %>
+    </div>
+    <hr style="border:none">
+    <div class="form-group">
+      <%= form.label t :current_version, style: "display: block" %>      
+      <%= form.check_box :current_version %>      
+    </div>
+  <hr style="border:none">
+    <div class="form-group">
+    <label for="data_dictionary[data_version_id]">Seleccione la versión del diccionario que requiere</label>
+    <select name="data_dictionary[data_version_id]" class="form-control">
+      <% DataDictionary.all.each_with_index do |dictionary, index| %>
+      <% if index == 0 %>
+        <option value=""></option>
+      <% end %>
+      <option value="<%= dictionary.id %>"><%= dictionary.version %></option>
+      <% end %>
+    </select>
+    </select>
+    </div>
+    <hr style="border:none">
+    <div class="col-sm-8">
+        <%= link_to t("New data dictionary field"), new_data_dictionary_field_path, class: "btn btn-primary", data: { turbo_frame: "_top" }%>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Tipo de dato</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody id="data-dictionary-fields">
+          <!-- Fields will be dynamically rendered here -->
+        </tbody>
+      </table>
+    </div>
+    <%= turbo_frame_tag "remote_modal_dictionary_field", target: "_top" %>
+    <script>
+
+
+    // Function to fetch and render the data dictionaries based on the selected catalog
+    function fetchDataDictionaries() {
+      var catalogId = document.querySelector('select[name="data_dictionary[catalog_id]"]').value;
+      var url = '/catalogs/' + catalogId + '/data_dictionaries';
+      fetch
+      (
+        url, 
+          { 
+            method: 'GET',
+            headers: {
+              'X-CSRF-Token': document.getElementsByName('csrf-token')[0].getAttribute('content'),
+              'X-Requested-With': 'XMLHttpRequest',
+              'Content-Type':     'application/json',
+              'Accept':           'application/json'
+            },
+            credentials: 'same-origin'
+          }
+      ).then(response => response.json())
+        .then(dataDictionaries => {
+          
+          var select = document.querySelector('select[name="data_dictionary[data_version_id]"]');
+          select.innerHTML = '';
+          var blankOption = document.createElement('option');
+            blankOption.value = '';
+            select.insertBefore(blankOption, select.firstChild);
+          dataDictionaries.forEach(dataDictionary => {
+            var option = document.createElement('option');
+            option.value = dataDictionary.id;
+            option.textContent = dataDictionary.version;
+            select.appendChild(option);
+          });
+            
+        })
+        .catch(error => {
+          console.error('Error fetching data dictionaries:', error);
+        });
+    }
+
+    // Attach the fetchDataDictionaries function to the onchange event of the catalog select element
+    document.querySelector('select[name="data_dictionary[catalog_id]"]').onchange = fetchDataDictionaries;
+    // Fetch and render the data dictionaries initially
+    fetchDataDictionaries();
+
+      // Function to fetch and render the fields based on the selected data version
+      function fetchFields() {
+
+        var dataVersionId = document.querySelector('select[name="data_dictionary[data_version_id]"]').value;
+        //var catalogId = document.querySelector('select[name="data_dictionary[catalog_id]"]').value;
+        
+        var url = '/data_dictionaries/' + dataVersionId + '/data_dictionary_fields';
+        var tbody = document.getElementById('data-dictionary-fields');
+        tbody.innerHTML = '';
+        fetch(url, { headers: { 'Content-Type': 'application/json' } })
+          .then(response => response.json())
+          .then(fields => {
+            // var tbody = document.getElementById('data-dictionary-fields');
+            // tbody.innerHTML = '';
+
+            fields.forEach(field => {
+              var row = document.createElement('tr');
+
+              var fieldNameCell = document.createElement('td');
+              fieldNameCell.textContent = field.field_name;
+              row.appendChild(fieldNameCell);
+
+              var dataTypeCell = document.createElement('td');
+              dataTypeCell.textContent = field.field_type_id;
+              row.appendChild(dataTypeCell);
+
+              var dataTypeCell = document.createElement('td');
+              dataTypeCell.textContent = field.field_description;
+              row.appendChild(dataTypeCell);
+
+              // var lengthCell = document.createElement('td');
+              // lengthCell.textContent = field.length;
+              // row.appendChild(lengthCell);
+
+              // var requiredCell = document.createElement('td');
+              // requiredCell.textContent = field.required;
+              // row.appendChild(requiredCell);
+
+              tbody.appendChild(row);
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching fields:', error);
+          });
+      }
+
+      // Attach the fetchFields function to the onchange event of the select element
+      document.querySelector('select[name="data_dictionary[data_version_id]"]').onchange = fetchFields;
+
+      // Fetch and render the fields initially
+      fetchFields();
+    </script>
+
+    <hr style="border:none">
+    <div class="text-right">
+    <%= form.submit t("Save"), class: "btn btn-success" %>
+  </div>
+<% end %>

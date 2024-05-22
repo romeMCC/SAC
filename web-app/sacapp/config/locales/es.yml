@@ -1,0 +1,147 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+es:
+  hello: "Hola mundo"
+  New data dictionary: "Nuevo diccionario de datos"
+  current_version: "Versión actual"
+  modification_type_id: "Tipo de modificación"
+  description: "Descripción"
+  Description: "Descripción"
+  catalog_id: "Catálogo"
+  created_by: "Creado por"
+  modified_by: "Modificado por"
+  created_at: "Creado el"
+  updated_at: "Fecha modificación"
+  Save: "Guardar"
+  Catalogs: "Catálogos"
+  New catalog: "Nuevo catálogo"
+  New Catalog: "Nuevo catálogo"
+  Name: "Nombre"
+  name: "Nombre"
+  Created: "Creado"
+  Modified: "Modificado"
+  version: "Versión"
+  Back to data dictionaries: "Volver a diccionarios de datos"
+  Back to catalogs: "Volver a catálogos"
+  Back to catalog: "Volver a catálogo"
+  Create: "Crear"
+  Cancel: "Cancelar"
+  submit: "Enviar"
+  Catalog was successfully created: "Catálogo creado con éxito"
+  error: "Error"
+  errors: "Errores"
+  Edit: "Editar"
+  Edit catalog: "Editar catálogo"
+  New catalog: "Nuevo catálogo"
+  Data dictionaries: "Diccionarios de datos"
+  New data dictionary: "Nuevo diccionario de datos"
+  field name: "Nombre del campo"
+  Field name: "Nombre del campo"
+  New data dictionary fields: "Nuevo campo de diccionario de datos"
+  New data dictionary field: "Nuevo campo"
+  New version: "Nueva versión"
+  Catalog: "Catálogo"
+  Dictionary fields: "Campos de diccionario"
+  Data dictionary fields: "Campos de diccionario de datos"
+  Modification type: "Tipo de modificación"
+  errors:
+    messages:
+      required: "es un campo requerido"
+  activerecord:
+    attributes:
+      catalog:
+        name: "Nombre"
+      data_dictionary:
+        description: "Descripción"
+        modification_type_id: "Tipo de modificación"
+        catalog_id: "Catálogo"
+      data_dictionary_field:
+        data_dictionary_id: "Diccionario de datos"
+        field_name: "Nombre del campo"
+        field_type: "Tipo de campo"
+        field_type_id: "Tipo de campo"
+        field_length: "Longitud del campo"
+        field_precision: "Precisión del campo"
+        field_scale: "Escala del campo"
+        field_nullable: "Nulo"
+        field_default: "Valor por defecto"
+        field_description: "Descripción del campo"
+        field_order: "Orden del campo"
+        field_example: "Ejemplo del campo"
+        field_values: "Valores del campo"
+        field_values_description: "Descripción de los valores del campo"
+        field_values_order: "Orden de los valores del campo"
+        field_values_example: "Ejemplo de los valores del campo"
+        field_values_value: "Valor"
+        field_values_value_description: "Descripción del valor"
+        field_values_value_order: "Orden del valor"
+        field_values_value_example: "Ejemplo del valor"
+        field_values_value_value: "Valor"
+        field_values_value_value_description: "Descripción del valor"
+        field_values_value_value_order: "Orden del valor"
+        field_values_value_value_example: "Ejemplo del valor"
+        field_values_value_value_value: "Valor"
+        field_values_value_value_value_description: "Descripción del valor"
+        field_values_value_value_value_order: "Orden del valor"
+        field_values_value_value_value_example: "Ejemplo del valor"
+        field_values_value_value_value_value: "Valor"
+        field_values_value_value_value_value_description: "Descripción del valor"
+        field_values_value_value_value_value_order: "Orden del valor"
+        field_values_value_value_value_value_example: "Ejemplo del valor"
+        field_values_value_value_value_value_value: "Valor"
+        field_values_value_value_value_value_value_description: "Descripción del valor"
+        field_values_value_value_value_value_value_order: "Orden del valor"
+        field_values_value_value_value_value_value_example: "Ejemplo del valor"
+        field_values_value_value_value_value_value_value: "Valor"
+        field_values_value_value_value_value_value_value_description: "Descripción del valor"
+        field_values_value_value_value_value_value_value_order: "Orden del valor"
+        field_values_value_value_value_value_value_value_example: "Ejemplo del valor"
+        field_values_value_value_value_value_value_value_value: "Valor"
+    errors:
+      models:
+        catalog:
+          attributes:
+            name:
+              blank: "no puede estar en blanco"
+              taken: "ya está en uso"
+        data_dictionary:
+          attributes:
+            description:
+              blank: "no puede estar en blanco"
+            modification_type_id:
+              blank: "no puede estar en blanco"
+            catalog_id:
+              blank: "no puede estar en blanco"  
+    models:
+      catalog: "Catálogo"        
+      data_dictionary: "Diccionario de datos"
+      modification_type: "Tipo de modificación"
+
+      

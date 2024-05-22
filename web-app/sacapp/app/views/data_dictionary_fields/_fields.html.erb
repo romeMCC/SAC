@@ -1,0 +1,29 @@
+
+        
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title">ID: <%= @catalog.id %></h4>
+    <h4 class="card-title">Nombre del catálogo: <%= @catalog.name %></h4>    
+  </div>
+</div>
+<br/>
+<div id="data_dictionary_fields">
+  <table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Campo</th>
+      <th>Tipo de dato</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @data_dictionary_fields.each do |data_dictionary_field| %>
+      <tr>
+        <td><%= data_dictionary_field.field_name %></td>
+        <td><%= data_dictionary_field.field_type.name %></td>
+        <td><%= data_dictionary_field.field_description %></td>        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>

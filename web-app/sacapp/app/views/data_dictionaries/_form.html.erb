@@ -1,0 +1,342 @@
+<%= form_with(model: data_dictionary) do |form| %>
+  <% if data_dictionary.errors.any? %>
+    <div class="alert alert-danger">
+      <h5>Corregir lo siguiente antes de guardar:</h5>
+      <ul>
+        <% data_dictionary.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+   <div class="form-group">
+    <%= form.label "Versión del diccionario", style: "display: block" %>
+    <%= form.text_field :version, readonly: true, class: "form-control" %>
+  </div>  
+  <hr style="border:none">
+    <div class="form-group">
+      <%= form.label t :modification_type_id, style: "display: block" %>
+      <%= form.collection_select :modification_type_id, ModificationType.all, :id, :name, { include_blank: true }, { class: "form-control" } %>
+    </div>
+    <hr style="border:none">
+    <div class="form-group">
+    <%= form.label "Fecha de la modificación", style: "display: block" %>
+    <%= form.text_field :created_at, value: data_dictionary.created_at.strftime("%d/%m/%Y"), readonly: true, class: "form-control" %>
+  </div>    
+    <hr style="border:none">  
+    <div class="form-group">
+      <%= form.label t :description, style: "display: block" %>
+      <%= form.text_area :description, rows: 5, cols: 40, class: "form-control" %>
+    </div>
+    <hr style="border:none">  
+    <div class="form-group">    
+    <label for="data_dictionary[data_version_id]">Seleccione la versión del diccionario que requiere</label>
+    <select name="data_dictionary[data_version_id]" class="form-control">
+      <option value=""></option>
+    </select>
+    </div>
+    <%= form.hidden_field :catalog_id %>
+    <hr style="border:none">
+    <div class="col-sm-8">
+ 
+    </div>
+    <div class="table-responsive" style="display:none;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Campo</th>
+            <th>Tipo de dato</th>
+            <th>Descripción</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="data-dictionary-fields">         
+        </tbody>
+      </table>
+    </div>
+
+
+<%= link_to "Agregar campos +", data_dictionary_data_dictionary_fields_path(@data_dictionary.id), class: "btn btn-success", data: {turbo_stream: true} %>
+    
+     <ul id="data_dictionary_fields">
+    </ul>
+    
+    <script>
+
+
+    // Function to fetch and render the data dictionaries based on the selected catalog
+    function fetchDataDictionaries() {
+      //var catalogId = document.querySelector('select[name="data_dictionary[catalog_id]"]').value;
+      var catalogId = document.querySelector('input[name="data_dictionary[catalog_id]"]').value;
+      var url = '/catalogs/' + catalogId + '/data_dictionaries';
+      fetch
+      (
+        url, 
+          { 
+            method: 'GET',
+            headers: {
+              'X-CSRF-Token': document.getElementsByName('csrf-token')[0].getAttribute('content'),
+              'X-Requested-With': 'XMLHttpRequest',
+              'Content-Type':     'application/json',
+              'Accept':           'application/json'
+            },
+            credentials: 'same-origin'
+          }
+      ).then(response => response.json())
+        .then(dataDictionaries => {
+          
+          var select = document.querySelector('select[name="data_dictionary[data_version_id]"]');
+          select.innerHTML = '';
+          var blankOption = document.createElement('option');
+            blankOption.value = '';
+            select.insertBefore(blankOption, select.firstChild);
+          dataDictionaries.forEach(dataDictionary => {
+            var option = document.createElement('option');
+            option.value = dataDictionary.id;
+            option.textContent = dataDictionary.version;
+            select.appendChild(option);
+          });
+            
+        })
+        .catch(error => {
+          console.error('Error fetching data dictionaries:', error);
+        });
+    }
+
+    // Function to fetch and render the fields based on the selected data version
+    function fetchFields() {
+
+        var dataVersionId = document.querySelector('select[name="data_dictionary[data_version_id]"]').value;
+        //var catalogId = document.querySelector('select[name="data_dictionary[catalog_id]"]').value;
+
+        var url = '/data_dictionaries/' + dataVersionId + '/data_dictionary_fields';
+        var tbody = document.getElementById('data-dictionary-fields');
+        tbody.innerHTML = '';
+
+        fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-Token': document.getElementsByName('csrf-token')[0].getAttribute('content'),
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(fields => {
+                // var tbody = document.getElementById('data-dictionary-fields');
+                // tbody.innerHTML = ''; 
+                fields.forEach(field => {
+
+                    var row = document.createElement('tr');
+
+                    var fieldNameCell = document.createElement('td');
+                    fieldNameCell.textContent = field.field_name;
+                    row.appendChild(fieldNameCell);
+                    var hiddenField = document.createElement('input');
+                    hiddenField.type = 'hidden';
+                    hiddenField.name = 'data_dictionary[data_dictionary_fields_attributes][][field_name]';
+                    hiddenField.value = field.field_name;
+                    row.appendChild(hiddenField);
+
+                    var dataTypeCell = document.createElement('td');
+                    dataTypeCell.textContent = field.field_type_name;
+                    row.appendChild(dataTypeCell);
+                    var hiddenField = document.createElement('input');
+                    hiddenField.type = 'hidden';
+                    hiddenField.name = 'data_dictionary[data_dictionary_fields_attributes][][field_type_id]';
+                    hiddenField.value = field.field_type_id;
+                    row.appendChild(hiddenField);
+
+                    var dataTypeCell = document.createElement('td');
+                    dataTypeCell.textContent = field.field_description;
+                    row.appendChild(dataTypeCell);
+                    var hiddenField = document.createElement('input');
+                    hiddenField.type = 'hidden';
+                    hiddenField.name = 'data_dictionary[data_dictionary_fields_attributes][][field_description]';
+                    hiddenField.value = field.field_description;
+                    row.appendChild(hiddenField);
+
+                    var editButtonCell = document.createElement('td');
+                    var editLink = document.createElement('a');
+                    editLink.textContent = 'Editar';
+                    editLink.setAttribute('data-turbo', 'false');
+                    editLink.classList.add('btn', 'btn-primary');
+                    editLink.href = '#'; // Replace with the desired URL
+                    editLink.addEventListener('click', function() {
+                        // Get the field values from the focused row
+                        var fieldName = row.querySelector('input[name="data_dictionary[data_dictionary_fields_attributes][][field_name]"]').value;
+                        var fieldType = row.querySelector('input[name="data_dictionary[data_dictionary_fields_attributes][][field_type_id]"]').value;
+                        var fieldDescription = row.querySelector('input[name="data_dictionary[data_dictionary_fields_attributes][][field_description]"]').value;
+
+                        // Set the field values in the modal form
+                        var modalForm = document.getElementById('editFormField');
+                        modalForm.innerHTML = '';
+                        var fieldNameInput = document.createElement('input');
+                        fieldNameInput.type = 'text';
+                        fieldNameInput.name = 'field_name';
+                        fieldNameInput.value = fieldName;
+                        fieldNameInput.classList.add('form-control');
+                        var fieldNameDiv = document.createElement('div');
+                        fieldNameDiv.classList.add('form-group');
+                        fieldNameDiv.appendChild(fieldNameInput);
+                        modalForm.appendChild(fieldNameDiv);
+                        modalForm.appendChild(document.createElement('hr')).style.border = 'none';
+
+                        var fieldTypeSelect = document.createElement('select');
+                        fieldTypeSelect.name = 'field_type';
+                        fieldTypeSelect.classList.add('form-control');
+                        var fieldTypeDiv = document.createElement('div');
+                        fieldTypeDiv.classList.add('form-group');
+                        fieldTypeDiv.appendChild(fieldTypeSelect);
+                        modalForm.appendChild(fieldTypeDiv);
+                        modalForm.appendChild(document.createElement('hr')).style.border = 'none';
+
+                        // Fetch and populate the field type select options
+                        fetch('/field_types')
+                            .then(response => response.json())
+                            .then(fieldTypes => {
+                                fieldTypes.forEach(field_type => {
+                                    var option = document.createElement('option');
+                                    option.value = field_type.id;
+                                    option.textContent = field_type.name;
+                                    if (field_type.id == fieldType) {
+                                        option.selected = true;
+                                    }
+                                    fieldTypeSelect.appendChild(option);
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching field types:', error);
+                            });
+
+                        var fieldDescriptionInput = document.createElement('input');
+                        fieldDescriptionInput.type = 'text';
+                        fieldDescriptionInput.name = 'field_description';
+                        fieldDescriptionInput.value = fieldDescription;
+                        fieldDescriptionInput.classList.add('form-control');
+                        var fieldDescriptionDiv = document.createElement('div');
+                        fieldDescriptionDiv.classList.add('form-group');
+                        fieldDescriptionDiv.appendChild(fieldDescriptionInput);
+                        modalForm.appendChild(fieldDescriptionDiv);
+                        modalForm.appendChild(document.createElement('hr')).style.border = 'none';
+
+                        var rowIndexInput = document.createElement('input');
+                        rowIndexInput.type = 'hidden';
+                        rowIndexInput.name = 'row_index';
+                        rowIndexInput.value = row.rowIndex-1;
+                        modalForm.appendChild(rowIndexInput);
+                        
+                        // Add an event listener to the save button   
+                        var saveButton = document.getElementById('saveChanges');
+                        saveButton.onclick = function() {
+                            saveFieldChanges();
+                        };                        
+
+                        // Open the modal
+                        $('#editModalField').modal('show');
+
+                    });
+                  
+                    editButtonCell.appendChild(editLink);
+                    row.appendChild(editButtonCell);
+
+                    var removeButtonCell = document.createElement('td');
+                    var removeButton = document.createElement('button');
+                    removeButton.textContent = 'Eliminar';
+                    removeButton.classList.add('btn', 'btn-danger');
+                    removeButton.addEventListener('click', function() {
+                        row.remove();
+                    });
+                    removeButtonCell.appendChild(removeButton);
+                    row.appendChild(removeButtonCell);
+
+                    tbody.appendChild(row);
+                });
+            }).catch(error => {
+                console.error('Error fetching fields:', error);
+            });
+
+        tbody.parentElement.parentElement.style.display = 'block';
+
+    }
+
+      // Attach the fetchFields function to the onchange event of the select element
+      document.querySelector('select[name="data_dictionary[data_version_id]"]').onchange = fetchFields;
+
+      fetchDataDictionaries();
+      // Fetch and render the fields initially
+      //fetchFields();
+    </script>
+
+    <hr style="border:none">
+    <div class="text-right">
+    <%= form.submit t("Save"), class: "btn btn-success" %>
+  </div>
+  
+<% end %>
+<div class="modal fade" id="editModalField" tabindex="-1" role="dialog" aria-labelledby="editModalFieldLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalFieldLabel">Editar Campo</h5>         
+        </div>
+        <div class="modal-body">
+          <form id="editFormField">
+            <div class="form-group">
+              <label for="fieldName">Nombre del Campo</label>
+              <input type="text" class="form-control" id="fieldName" name="fieldName">
+            </div>
+            <div class="form-group">
+              <label for="fieldType">Tipo de Dato</label>
+              <input type="text" class="form-control" id="fieldType" name="fieldType">
+            </div>
+            <div class="form-group">
+              <label for="fieldDescription">Descripción</label>
+              <textarea class="form-control" id="fieldDescription" name="fieldDescription" rows="3"></textarea>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="saveChanges">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+
+    function saveFieldChanges() {
+
+        var row = document.getElementById('data-dictionary-fields').rows[document.querySelector('input[name="row_index"]').value];
+        // Get the field values from the modal form
+        var newFieldName = document.querySelector('input[name="field_name"]').value;
+        var newFieldType = document.querySelector('select[name="field_type"]').value;
+        var newFieldTypeName = document.querySelector('select[name="field_type"]').selectedOptions[0].text;
+        var newFieldDescription = document.querySelector('input[name="field_description"]').value;
+        debugger;
+        // Set the field values in the focused row
+        row.cells[0].innerText = newFieldName;
+        row.querySelector('input[name="data_dictionary[data_dictionary_fields_attributes][][field_name]"]').value = newFieldName;
+        row.cells[1].innerText = newFieldTypeName;
+        row.querySelector('input[name="data_dictionary[data_dictionary_fields_attributes][][field_type_id]"]').value = newFieldType;
+        row.cells[2].innerText = newFieldDescription;
+        row.querySelector('input[name="data_dictionary[data_dictionary_fields_attributes][][field_description]"]').value = newFieldDescription;
+
+        // Close the modal
+        closeModalField();
+    }
+
+    function closeModalField() {
+      $('#editModalField').modal('hide');
+      console.log('Modal closed');
+    }
+
+    $('#editModalField').on('hidden.bs.modal', function (e) {
+      console.log('Modal on hidden');
+      $(this).find('form').trigger('reset');
+    });
+  </script>

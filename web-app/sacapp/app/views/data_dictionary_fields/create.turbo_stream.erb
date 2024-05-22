@@ -1,0 +1,18 @@
+<%= fields model: @data_dictionary do |form| %>
+  <%= form.fields_for :data_dictionary_fields, child_index: params[:index] do |field_form| %>
+    <%= turbo_stream.replace "add-field" do %>
+      <%= form.submit "Add field", 
+            formaction: data_dictionary_field_path(params[:index].to_i + 1), 
+            formmethod: :post, 
+            formnovalidate: true, 
+            id: "add-field" %>
+        <% end %>
+        
+
+        <%= turbo_stream.append "data-dictionary-fields-form" do %>
+        <%= render "data_dictionary_fields/data_dictionary_fields_form", form: field_form %>
+        <% end %>
+
+        
+  <% end %>
+<% end %>
