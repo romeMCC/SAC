@@ -1,3 +1,4 @@
+require 'pry'
 class CatalogDataController < ApplicationController
   before_action :set_catalog_datum, only: %i[ show edit update destroy ]
 
@@ -8,6 +9,9 @@ class CatalogDataController < ApplicationController
 
   # GET /catalog_data/1 or /catalog_data/1.json
   def show
+    #binding.pry
+    @data_dictionary_id = params[:id]
+    @catalog_datum = CatalogDatum.find_by(data_dictionary_id: @data_dictionary_id)
   end
 
   # GET /catalog_data/new
@@ -38,11 +42,65 @@ class CatalogDataController < ApplicationController
   def update
     respond_to do |format|
       if @catalog_datum.update(catalog_datum_params)
-        format.html { redirect_to catalog_datum_url(@catalog_datum), notice: "Catalog datum was successfully updated." }
+        format.html { redirect_to catalog_datum_url(@catalog_datum), alert: "Catalog datum was successfully updated." }
         format.json { render :show, status: :ok, location: @catalog_datum }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @catalog_datum.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def import_csv
+    csv_file = params[:csv_file].path
+    csv_data = CSV.read(csv_file, headers: true)
+    json_data = csv_data.map(&:to_h).to_json
+    @catalog_datum.tuples = json_data
+    @catalog_datum.save
+    redirect_to catalog_data_path(@catalog_datum), notice: 'CSV data imported successfully'
+  end
+
+  def import
+    if !params[:data_file].nil?
+      respond_to do |format|
+        require 'roo'
+        xlsx = Roo::Spreadsheet.open(params[:data_file].path)
+        headers = xlsx.row(1)
+        json_data = []
+
+        (2..xlsx.last_row).each do |i|
+          row = Hash[[headers, xlsx.row(i)].transpose]
+          json_data << row
+        end
+
+        data_dictionary = DataDictionary.find(params[:data_dictionary_id])
+        data_dictionary_fields = data_dictionary.data_dictionary_fields.pluck(:field_name)
+        spreadsheet_headers = headers.map(&:to_s)
+        #binding.pry
+        unless data_dictionary_fields == spreadsheet_headers
+          @catalog_datum = CatalogDatum.new
+          @catalog_datum.errors.add(:base, "Columnas no válidas. Esperado: #{data_dictionary_fields}, Actual: #{spreadsheet_headers}")
+          #format.html { render :show, status: :unprocessable_entity }
+          format.html { redirect_to catalog_path(params[:data_dictionary_id]), alert: "Columnas no válidas. Esperado: #{data_dictionary_fields}, Actual: #{spreadsheet_headers}" }
+          format.json { render json: @catalog_datum.errors, status: :unprocessable_entity }
+          #format.turbo_stream { render :form_update, status: :unprocessable_entity }
+        else
+          @catalog_datum = CatalogDatum.new
+          json_rows = json_data.to_json
+          @data_dictionary = DataDictionary.find(params[:data_dictionary_id])
+          @catalog_datum.catalog_id = @data_dictionary.catalog_id
+          @catalog_datum.data_dictionary_id = @data_dictionary.id
+          @catalog_datum.tuples = json_rows
+
+          if @catalog_datum.save
+            format.html { redirect_to catalogs_url, notice: "File successfully imported." }
+            format.json { render :show, status: :created, location: @catalog_datum }
+          else
+            format.html { render :show, status: :unprocessable_entity }
+            format.json { render json: @catalog_datum.errors, status: :unprocessable_entity }
+            format.turbo_stream { render :form_update, status: :unprocessable_entity }
+          end
+        end
       end
     end
   end
@@ -60,7 +118,8 @@ class CatalogDataController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_catalog_datum
-      @catalog_datum = CatalogDatum.find(params[:id])
+      #@catalog_datum = CatalogDatum.find(params[:id])
+      @catalog_datum = CatalogDatum.find_by(data_dictionary_id: params[:id]) 
     end
 
     # Only allow a list of trusted parameters through.

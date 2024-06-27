@@ -15,6 +15,11 @@
     <%= form.label :field_description, style: "display: block" %>    
     <%= form.text_area :field_description, rows: 5, cols: 40, class: "form-control" %>
 </div>
+<hr style="border:none">
+  <div class="form-group">
+    <%= form.label :locked, style: "display: block" %>
+    <%= form.check_box :locked, class: "form-check-input" %>
+  </div>
 <%= form.object.inspect %>
  <%= form.submit "destroy field", 
         formaction: data_dictionary_field_path(form.index, 0), 

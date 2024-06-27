@@ -1,14 +1,5 @@
-<p style="color: green"><%= notice %></p>
+<%= render "remote_modal_catalog_datum", title: t("Valores") do %>
 
-<h1>Catalog data</h1>
+  <%= render "datum", data_dictionary_id: @data_dictionary_id %>
 
-<div id="catalog_data">
-  <% @catalog_data.each do |catalog_datum| %>
-    <%= render catalog_datum %>
-    <p>
-      <%= link_to "Show this catalog datum", catalog_datum %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New catalog datum", new_catalog_datum_path %>
+<% end %>

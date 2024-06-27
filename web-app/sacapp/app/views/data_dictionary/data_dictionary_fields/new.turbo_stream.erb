@@ -15,7 +15,11 @@
         <%= text_area_tag "data_dictionary[data_dictionary_fields_attributes][][field_description]", "", id: "" , size: "40x5", class: 'form-control' %>    
       </div>              
     <hr style="border:none">
-
-  <button data-action="remove#remove" class="btn btn-danger">Remove</button>
+    <div class="form-group">
+      <%= label_tag :locked, "Bloqueado", style: "display: block" %>
+      <%= check_box_tag "data_dictionary[data_dictionary_fields_attributes][][locked]", "", false, id: "", class: 'form-check-input' %>
+    </div>
+<hr style="border:none">
+  <button data-action="remove#remove" class="btn btn-danger">Eliminar</button>
   </li>
 <% end %>

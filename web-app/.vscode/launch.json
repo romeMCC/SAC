@@ -6,8 +6,8 @@
             "name": "Debug Rails",
             "type": "rdbg",
             "request": "launch",
-            "cwd": "${workspaceFolder}/sacapp",
-            // "command": "bundle exec rails", #bundle exec rails won't stop in the debugger
+            "cwd": "${workspaceFolder}/sacapp/",
+            //"command": "bundle exec rails", 
             "command": "bin/rails",
             "script": "s",
             "args": ["-b","0.0.0.0"],

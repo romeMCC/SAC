@@ -57,7 +57,7 @@
     </div>
 
 
-<%= link_to "Agregar campos +", data_dictionary_data_dictionary_fields_path(@data_dictionary.id), class: "btn btn-success", data: {turbo_stream: true} %>
+<%= link_to "Agregar campos", data_dictionary_data_dictionary_fields_path(@data_dictionary.id), class: "btn btn-success", data: {turbo_stream: true} %>
     
      <ul id="data_dictionary_fields">
     </ul>
@@ -223,6 +223,7 @@
                         modalForm.appendChild(fieldDescriptionDiv);
                         modalForm.appendChild(document.createElement('hr')).style.border = 'none';
 
+                        // Add a hidden input to store the row index
                         var rowIndexInput = document.createElement('input');
                         rowIndexInput.type = 'hidden';
                         rowIndexInput.name = 'row_index';
@@ -243,15 +244,17 @@
                     editButtonCell.appendChild(editLink);
                     row.appendChild(editButtonCell);
 
-                    var removeButtonCell = document.createElement('td');
-                    var removeButton = document.createElement('button');
-                    removeButton.textContent = 'Eliminar';
-                    removeButton.classList.add('btn', 'btn-danger');
-                    removeButton.addEventListener('click', function() {
+                    if (!field.locked) {
+                      var removeButtonCell = document.createElement('td');
+                      var removeButton = document.createElement('button');
+                      removeButton.textContent = 'Eliminar';
+                      removeButton.classList.add('btn', 'btn-danger');
+                      removeButton.addEventListener('click', function() {
                         row.remove();
-                    });
-                    removeButtonCell.appendChild(removeButton);
-                    row.appendChild(removeButtonCell);
+                      });
+                      removeButtonCell.appendChild(removeButton);
+                      row.appendChild(removeButtonCell);
+                    }
 
                     tbody.appendChild(row);
                 });

@@ -23,7 +23,10 @@
     <%= form.label :field_description, style: "display: block" %>    
     <%= form.text_area :field_description, rows: 5, cols: 40, class: "form-control" %>
   </div>
-
+  <div class="form-group">
+    <%= form.label :locked, style: "display: block" %>
+    <%= form.check_box :locked, class: "form-check-input" %>
+  </div>
   <div>    
     <%= form.hidden_field :data_dictionary_id %>
   </div>

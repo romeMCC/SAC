@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_15_014404) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_27_041527) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,7 +33,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_15_014404) do
     t.uuid "modified_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "data_dictionary_id", null: false
     t.index ["catalog_id"], name: "index_catalog_data_on_catalog_id"
+    t.index ["data_dictionary_id"], name: "index_catalog_data_on_data_dictionary_id"
   end
 
   create_table "catalogs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -68,6 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_15_014404) do
     t.uuid "modified_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "locked", default: false
     t.index ["data_dictionary_id"], name: "index_data_dictionary_fields_on_data_dictionary_id"
     t.index ["field_type_id"], name: "index_data_dictionary_fields_on_field_type_id"
   end
@@ -119,6 +122,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_15_014404) do
 
   add_foreign_key "administrative_units", "organisms"
   add_foreign_key "catalog_data", "catalogs"
+  add_foreign_key "catalog_data", "data_dictionaries"
   add_foreign_key "data_dictionaries", "catalogs"
   add_foreign_key "data_dictionaries", "modification_types"
   add_foreign_key "data_dictionary_fields", "data_dictionaries"

@@ -38,7 +38,7 @@
 	// Uncomment the next line to run commands after the container is created.
 	// "postCreateCommand": "cat /etc/os-release",
 	//"postCreateCommand": "gem install rails && cd sacapp && bundle install && gem install debase -v0.2.5.beta2 -- --with-cflags=\"-Wno-incompatible-function-pointer-types\"",
-	//"postCreateCommand": "cd sacapp && rvm install \"ruby-3.3.0\" && rvm use \"ruby-3.3.0\" --default && gem install rails && bundle install",
+	//"postCreateCommand": "rvm install \"ruby-3.3.1\" && rvm use \"ruby-3.3.1\" --default && cd sacapp && gem install rails && bundle install",
 	"postCreateCommand": "sudo gem install rails",
 	// Configure tool-specific properties.
 	// "customizations": {},
@@ -47,8 +47,6 @@
 		"vscode": {
 		// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
-				"Shopify.ruby-lsp",
-				"Shopify.ruby-extensions-pack",
 				"GitHub.copilot",
 				"GitHub.copilot-chat",
 				"misogi.ruby-rubocop",

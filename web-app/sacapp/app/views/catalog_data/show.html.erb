@@ -1,10 +1,6 @@
-<p style="color: green"><%= notice %></p>
 
-<%= render @catalog_datum %>
+<%= render "remote_modal_catalog_datum", title: t("Valores") do %>
 
-<div>
-  <%= link_to "Edit this catalog datum", edit_catalog_datum_path(@catalog_datum) %> |
-  <%= link_to "Back to catalog data", catalog_data_path %>
+  <%= render "datum", data_dictionary_id: @data_dictionary_id %>
 
-  <%= button_to "Destroy this catalog datum", @catalog_datum, method: :delete %>
-</div>
+<% end %>

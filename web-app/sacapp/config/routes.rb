@@ -26,7 +26,9 @@ Rails.application.routes.draw do
       resources "data_dictionary_fields", only: [:index], as: :data_dictionary_fields
     end
   end
-  resources :catalog_data
+  resources :catalog_data do
+    resources :data_dictionaries
+  end
   resources :catalogs do
     resources :data_dictionaries
   end
@@ -42,6 +44,17 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  post 'catalog_data/import', to: 'catalog_data#import', as: 'import_catalog_data'
+
+  # API Routing
+  scope "/api" do
+    scope "/v1" do
+      scope "/catalogs" do
+        get "/:version" => "api#retrieve_data"
+        get "/" => "api#retrieve_data"
+      end        
+    end
+  end
   # resources :data_dictionary_fields, only: [], param: :index do
   #   #resources :data_dictionaries
   #   member do

@@ -1,0 +1,48 @@
+
+<p style="color: green"><%= notice %></p>
+<% if !@catalog_datum.nil? && @catalog_datum.errors.any? %>
+<div class="alert alert-danger">
+    <h5>Corregir lo siguiente antes de guardar:</h5>
+    <ul>
+      <% @catalog_datum.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<% if @catalog_datum.nil? %>
+  
+  <p style="color: red">No contiene registros</p>
+  <%= form_with(url: import_catalog_data_path, method: :post, local: true, multipart: true, data: { remote: true }) do %>
+    <div class="form-group">
+      <%= label_tag :data_file, 'Upload CSV File:' %>
+      <%= file_field_tag :data_file, accept: '.csv,.xlx,.xlsx' %>
+      <%= hidden_field_tag :data_dictionary_id, @data_dictionary_id %>
+    </div>
+    <%= submit_tag 'Import' %>
+  <% end %>
+<% end  %>        
+<% if !@catalog_datum.nil? && !@catalog_datum.errors.any? && @catalog_datum.tuples.present? %>
+  <div id="sample_data">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <% JSON.parse(@catalog_datum.tuples).first.keys.each do |header| %>
+            <th><%= header %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% JSON.parse(@catalog_datum.tuples).first(5).each do |tuple| %>
+          <tr>
+            <% tuple.each do |key, value| %>
+              <td><%= value %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+
+<% end %>

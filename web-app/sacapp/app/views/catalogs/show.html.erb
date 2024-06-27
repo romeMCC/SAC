@@ -1,5 +1,12 @@
 <p style="color: green"><%= t notice %></p>
 
+<% flash.each do |key, value| %>
+  <% if key == "alert" %>
+    <div class="alert alert-danger">
+      <%= value %>
+    </div>
+  <% end %>
+<% end %>
 <h1><%= t "Catalog" %></h1>
         
         <div class="card">
@@ -20,7 +27,48 @@
     <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">API - Endpoints</button>    
   </div>
   <div class="tab-content" id="v-pills-tabContent">
-    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">...</div>
+    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+    <section class="py-4">
+        <div class="row">
+          <div class="col-sm-8">
+             Valores
+          </div>
+
+        </div>
+      </section>
+      <table class="table table-hover">
+        <thead>
+          <tr>            
+            <th><%= t "Version" %></th>            
+            <th><%= "Fecha de Modificación" %></th>
+            <th><%= t "Modification type" %></th>          
+            <th>Responsable</th>   
+            <th>Registros</th> 
+            <th>Diccionario</th>
+            <th>API</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @catalog.data_dictionaries.each do |data_dictionary| %>
+            <tr>              
+              <td><%= data_dictionary.version %></td>
+              <td><%= data_dictionary.created_at.strftime("%d/%m/%Y") %></td>
+              <td><%= data_dictionary.modification_type.name %></td>
+              <td><%= data_dictionary.modified_by %></td>
+              <td>
+                <%= link_to t("Datos"), catalog_datum_path(data_dictionary.id), class: "btn btn-warning btn-sm", data: { turbo_frame: :remote_modal_catalog_datum } %>
+              </td>
+              <td>
+                <%= link_to t("Ver"), data_dictionary_fields_path(data_dictionary), class: "btn btn-warning btn-sm", data: { turbo_frame: :remote_modal_dictionary_field } %>   
+              </td>              
+              <td>
+
+              </td>       
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
     <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
       <section class="py-4">
         <div class="row">

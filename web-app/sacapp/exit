@@ -1,0 +1,15 @@
+
+[1mFrom:[0m /workspaces/web-app/sacapp/app/controllers/catalog_data_controller.rb:66 CatalogDataController#import:
+
+    [1;34m61[0m:   [32mend[0m
+    [1;34m62[0m: 
+    [1;34m63[0m:   [32mdef[0m [1;34mimport[0m
+    [1;34m64[0m:     require [31m[1;31m'[0m[31mroo[1;31m'[0m[31m[0m
+    [1;34m65[0m:     binding.pry
+ => [1;34m66[0m:     xlsx = [1;34;4mRoo[0m::[1;34;4mSpreadsheet[0m.open(params[[33m:data_file[0m].path)
+    [1;34m67[0m:     headers = xlsx.row([1;34m1[0m)
+    [1;34m68[0m:     json_data = []
+    [1;34m69[0m: 
+    [1;34m70[0m:     ([1;34m2[0m..xlsx.last_row).each [32mdo[0m |i|
+    [1;34m71[0m:       row = [1;34;4mHash[0m[[headers, xlsx.row(i)].transpose]
+
